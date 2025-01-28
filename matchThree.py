@@ -7,15 +7,6 @@ running = False
 windowLength = 800
 windowWidth = 600
 
-gridLengthStart = 200
-gridLengthEnd = 600
-gridLengthInterval = 40
-
-gridWidthStart = 100
-gridWidthEnd = 500
-gridWidthInterval = 40
-
-
 row = 10
 col = 10
 
@@ -29,22 +20,32 @@ ORANGE = (255, 127, 80)
 BACKGROUND_COLOUR = (173, 216, 230)
 GRID_COLOUR = (100, 100, 100)
                 
-def Draw_Grid(screen):
-    screen.fill(BACKGROUND_COLOUR)
-    pygame.draw.rect(screen, GREEN, (240, 140, gridLengthInterval, gridWidthInterval))
+def Draw_Grid():
+    gridLengthStart = 200
+    gridLengthEnd = 600
 
-    for x in range(gridLengthStart, gridLengthEnd + gridLengthInterval, gridLengthInterval): 
-        pygame.draw.line(screen, GRID_COLOUR, (x, gridWidthStart), (x, gridWidthEnd), 2)
-        
-    for y in range(gridWidthStart, gridWidthEnd + gridWidthInterval, gridWidthInterval): 
-        pygame.draw.line(screen, GRID_COLOUR, (gridLengthStart, y), (gridLengthEnd, y), 2)
-
-def Start_Game():
-    global running
+    gridWidthStart = 100
+    gridWidthEnd = 500
+    
+    blockSize = 40
     
     screen = pygame.display.set_mode((windowLength, windowWidth))
     pygame.display.set_caption("Match-3 Game")
-    Draw_Grid(screen)
+    screen.fill(BACKGROUND_COLOUR)
+    pygame.draw.rect(screen, GREEN, (240, 140, blockSize, blockSize))
+
+    for x in range(gridLengthStart, gridLengthEnd + blockSize, blockSize): 
+        pygame.draw.line(screen, GRID_COLOUR, (x, gridWidthStart), (x, gridWidthEnd), 2)
+        
+    for y in range(gridWidthStart, gridWidthEnd + blockSize, blockSize): 
+        pygame.draw.line(screen, GRID_COLOUR, (gridLengthStart, y), (gridLengthEnd, y), 2)
+
+    return screen
+
+def Start_Game():
+    global running, row, col
+    
+    screen = Draw_Grid()
 
     while running:
         for event in pygame.event.get():
