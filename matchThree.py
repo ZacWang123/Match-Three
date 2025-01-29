@@ -19,7 +19,7 @@ blockSize = 38
 gameRow = 10
 gameCol = 10
 
-GREY = (65, 65, 65)
+# GREY = (65, 65, 65)
 PURPLE = (128, 0, 128)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -27,10 +27,11 @@ YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 ORANGE = (255, 127, 80)
 
-COLOURS = [GREY, PURPLE, RED, GREEN, YELLOW, BLUE, ORANGE]
-
 BACKGROUND_COLOUR = (173, 216, 230)
 GRID_COLOUR = (100, 100, 100)
+
+COLOURS = [BACKGROUND_COLOUR, PURPLE, RED, GREEN, YELLOW, BLUE, ORANGE]
+
                 
 def Draw_Grid():
     screen = pygame.display.set_mode((windowLength, windowWidth))
@@ -38,10 +39,10 @@ def Draw_Grid():
     screen.fill(BACKGROUND_COLOUR)
 
     for x in range(gridLengthStart, gridLengthEnd + cellSize, cellSize): 
-        pygame.draw.line(screen, GRID_COLOUR, (x, gridWidthStart), (x, gridWidthEnd), 2)
+        pygame.draw.line(screen, GRID_COLOUR, (x, gridWidthStart), (x, gridWidthEnd), cellSize - blockSize)
         
     for y in range(gridWidthStart, gridWidthEnd + cellSize, cellSize): 
-        pygame.draw.line(screen, GRID_COLOUR, (gridLengthStart, y), (gridLengthEnd, y), 2)
+        pygame.draw.line(screen, GRID_COLOUR, (gridLengthStart, y), (gridLengthEnd, y), cellSize - blockSize)
 
     return screen
 
@@ -52,7 +53,7 @@ def Update_Grid(screen, gameGrid):
         for row in range(gameRow):
             realX = gridLengthStart + col * cellSize
             realY = gridWidthStart + row * cellSize
-            pygame.draw.rect(screen, COLOURS[gameGrid[col][row]], (realX + 2, realY + 2, blockSize, blockSize))
+            pygame.draw.rect(screen, COLOURS[gameGrid[col][row]], (realX + cellSize - blockSize, realY + cellSize - blockSize, blockSize, blockSize))
 
 def Start_Game():
     global running, gameRow, gameCol
