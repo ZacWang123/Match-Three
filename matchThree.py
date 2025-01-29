@@ -70,7 +70,7 @@ def Unhighlight_Cell(screen, gameGrid, row, col):
     realX = gridLengthStart + col * cellSize
     realY = gridWidthStart + row * cellSize
     pygame.draw.rect(screen, COLOURS[gameGrid[col][row]], (realX + cellSize - blockSize, realY + cellSize - blockSize, blockSize, blockSize))
-     
+    
 def Start_Game():
     global running, gameRow, gameCol
     gameGrid = [[0 for i in range(gameRow)] for j in range(gameCol)]
@@ -91,11 +91,26 @@ def Start_Game():
                 
                 if row >= 0 and row < gameRow and col >= 0 and col < gameCol:
                     if ((row, col) in clickedTiles):
-                        clickedTiles.remove((row, col))
                         Unhighlight_Cell(screen, gameGrid, row, col)
+                        clickedTiles.remove((row, col))
+                    elif (len(clickedTiles) == 1):
+                        if (abs(row -  clickedTiles[0][0]) + abs(col -  clickedTiles[0][1]) == 1):
+                            Highlight_Cell(screen, row, col)
+                            clickedTiles.append((row, col))
                     else:         
-                        clickedTiles.append((row, col))
                         Highlight_Cell(screen, row, col)
+                        clickedTiles.append((row, col))
+                        
+                if (len(clickedTiles) == 2):
+                    row1, col1 = clickedTiles[0]
+                    row2, col2 = clickedTiles[1]
+                    Unhighlight_Cell(screen, gameGrid, row1, col1)
+                    Unhighlight_Cell(screen, gameGrid, row2, col2)
+                    temp = gameGrid[col1][row1]
+                    gameGrid[col1][row1] = gameGrid[col2][row2]
+                    gameGrid[col2][row2] = temp
+                    clickedTiles = []
+                    Update_Grid(screen, gameGrid)
 
         pygame.display.update()
 
