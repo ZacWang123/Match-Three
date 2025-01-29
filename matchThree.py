@@ -7,8 +7,16 @@ running = False
 windowLength = 800
 windowWidth = 600
 
-row = 10
-col = 10
+gridLengthStart = 200
+gridLengthEnd = 600
+
+gridWidthStart = 100
+gridWidthEnd = 500
+
+blockSize = 40
+
+gridRow = 10
+gridCol = 10
 
 PURPLE = (128, 0, 128)
 RED = (255, 0, 0)
@@ -21,14 +29,6 @@ BACKGROUND_COLOUR = (173, 216, 230)
 GRID_COLOUR = (100, 100, 100)
                 
 def Draw_Grid():
-    gridLengthStart = 200
-    gridLengthEnd = 600
-
-    gridWidthStart = 100
-    gridWidthEnd = 500
-    
-    blockSize = 40
-    
     screen = pygame.display.set_mode((windowLength, windowWidth))
     pygame.display.set_caption("Match-3 Game")
     screen.fill(BACKGROUND_COLOUR)
@@ -43,7 +43,8 @@ def Draw_Grid():
     return screen
 
 def Start_Game():
-    global running, row, col
+    global running, gridRow, gridCol
+    tiles = []
     
     screen = Draw_Grid()
 
@@ -51,6 +52,11 @@ def Start_Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouseX, mouseY = event.pos
+                col = (mouseX - gridLengthStart) // blockSize
+                row = (mouseY - gridWidthStart) // blockSize
+                print("row: ", row, "   ", "col: ", col)
 
 
         pygame.display.update()
