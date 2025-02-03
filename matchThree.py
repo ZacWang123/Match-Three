@@ -71,6 +71,28 @@ def Unhighlight_Cell(screen, gameGrid, row, col):
     realY = gridWidthStart + row * cellSize
     pygame.draw.rect(screen, COLOURS[gameGrid[col][row]], (realX + cellSize - blockSize, realY + cellSize - blockSize, blockSize, blockSize))
     
+def Within_Grid(row, col):
+    if (row >= 0 and row < gameRow and col >= 0 and col < gameCol):
+        return 1
+    return 0
+    
+def Check_Matches(gameGrid):
+    for col in range(gameCol):
+        for row in range(gameRow):
+            currentTile = gameGrid[col][row]
+            if row < gameRow - 2:
+                if (gameGrid[col][row + 1] == currentTile and gameGrid[col][row + 2] == currentTile):
+                    gameGrid[col][row] = 0
+                    gameGrid[col][row + 1] = 0
+                    gameGrid[col][row + 2] = 0
+            if col < gameCol - 2:
+                if (gameGrid[col + 1][row] == currentTile and gameGrid[col + 2][row] == currentTile):
+                    gameGrid[col][row] = 0
+                    gameGrid[col + 1][row] = 0
+                    gameGrid[col + 2][row] = 0
+
+    return gameGrid
+    
 def Start_Game():
     global running, gameRow, gameCol
     gameGrid = [[0 for i in range(gameRow)] for j in range(gameCol)]
@@ -89,7 +111,7 @@ def Start_Game():
                 col = (mouseX - gridLengthStart) // cellSize
                 row = (mouseY - gridWidthStart) // cellSize
                 
-                if row >= 0 and row < gameRow and col >= 0 and col < gameCol:
+                if (Within_Grid(row, col)):
                     if ((row, col) in clickedTiles):
                         Unhighlight_Cell(screen, gameGrid, row, col)
                         clickedTiles.remove((row, col))
@@ -110,6 +132,7 @@ def Start_Game():
                     gameGrid[col1][row1] = gameGrid[col2][row2]
                     gameGrid[col2][row2] = temp
                     clickedTiles = []
+                    gameGrid = Check_Matches(gameGrid)
                     Update_Grid(screen, gameGrid)
 
         pygame.display.update()
